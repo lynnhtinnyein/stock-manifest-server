@@ -8,7 +8,7 @@ class UpdateCategoryRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->hasPermission('categories.update') ?? false;
+        return $this->user()?->hasPermission('items.default') ?? false;
     }
 
     public function rules(): array

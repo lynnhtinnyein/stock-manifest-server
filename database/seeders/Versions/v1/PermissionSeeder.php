@@ -17,6 +17,43 @@ class PermissionSeeder extends Seeder
 
         DB::transaction(function () {
             $permissions = [
+                // users
+                [
+                    'value' => 'users.view',
+                    'name' => 'View Users',
+                    'description' => 'View all user accounts and information',
+                    'is_admin_default' => true,
+                    'accessible_roles' => ["SUPER_ADMIN", "ADMIN"],
+                ],
+                [
+                    'value' => 'users.create',
+                    'name' => 'Create Accounts',
+                    'description' => 'Create new user account to system with specific role and permissions',
+                    'is_admin_default' => true,
+                    'accessible_roles' => ["SUPER_ADMIN", "ADMIN"]
+                ],
+                [
+                    'value' => 'users.update',
+                    'name' => 'Edit Accounts',
+                    'description' => 'Modify account details, including updating user information and resetting passwords',
+                    'is_admin_default' => true,
+                    'accessible_roles' => ["SUPER_ADMIN", "ADMIN"]
+                ],
+                [
+                    'value' => 'users.suspend',
+                    'name' => 'Suspend Accounts',
+                    'description' => 'Suspend or restore user accounts',
+                    'is_admin_default' => true,
+                    'accessible_roles' => ["SUPER_ADMIN", "ADMIN"]
+                ],
+                [
+                    'value' => 'users.delete',
+                    'name' => 'Delete Accounts',
+                    'description' => 'Remove user accounts from the system permanently',
+                    'is_admin_default' => true,
+                    'accessible_roles' => ["SUPER_ADMIN", "ADMIN"]
+                ],
+
                 //items
                 [
                     //done
@@ -34,7 +71,13 @@ class PermissionSeeder extends Seeder
                 Permission::create($permission);
             }
 
-            $dependencies = [];
+            $dependencies = [
+                'users.create' => ['users.view'],
+                'users.update' => ['users.view'],
+                'users.delete' => ['users.view'],
+                'users.updatePassword' => ['users.view'],
+                'users.suspend' => ['users.view'],
+            ];
 
             foreach ($dependencies as $permissionValue => $dependsOn) {
                 $permission = Permission::where('value', $permissionValue)->first();

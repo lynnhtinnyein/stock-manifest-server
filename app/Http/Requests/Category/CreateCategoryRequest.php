@@ -8,7 +8,7 @@ class CreateCategoryRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->hasPermission('categories.default') ?? false;
+        return $this->user()?->hasPermission('items.default') ?? false;
     }
 
     public function rules(): array

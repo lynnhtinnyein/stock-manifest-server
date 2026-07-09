@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -84,6 +85,18 @@ Route::prefix('v1')->group(function () {
             Route::apiResource('/', ItemController::class);
             Route::post('/{item}/image', [ItemController::class, 'syncImage']);
             Route::post('/{id}/restore', [ItemController::class, 'restore']);
+        });
+
+        // Settings
+        Route::prefix('settings')->middleware('permission:settings.default')->controller(SettingController::class)->group(function () {
+            Route::get('/', [SettingController::class, 'index']);
+            Route::get('/{setting}', [SettingController::class, 'show']);
+
+            Route::middleware('permission:settings.manage')->group(function () {
+                Route::post('/', [SettingController::class, 'store']);
+                Route::put('/{setting}', [SettingController::class, 'update']);
+                Route::delete('/{setting}', [SettingController::class, 'destroy']);
+            });
         });
     });
 });
