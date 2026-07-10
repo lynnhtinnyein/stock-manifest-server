@@ -16,6 +16,7 @@ class ItemResource extends BaseResource
             'category' => new CategoryResource($this->category),
             'priceInThb' => $this->price_in_thb,
             'weightInGrams' => $this->weight_in_grams,
+            'cargoPriceInThb' => $this->cargo_price_in_thb,
             'cargoPriceInMmk' => $this->cargo_price_in_mmk,
             'sellingPriceInMmk' => $this->selling_price_in_mmk,
             'stockIn' => $this->stock_in,

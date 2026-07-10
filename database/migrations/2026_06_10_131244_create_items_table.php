@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->unsignedBigInteger('price_in_thb')->default(0); //in thb
             $table->unsignedBigInteger('weight_in_grams')->default(0); //in grams
+            $table->unsignedBigInteger('cargo_price_in_thb')->default(0);
             $table->unsignedBigInteger('cargo_price_in_mmk')->default(0);
             $table->unsignedBigInteger('selling_price_in_mmk')->default(0);
 

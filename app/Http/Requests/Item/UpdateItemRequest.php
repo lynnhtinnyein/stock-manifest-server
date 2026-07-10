@@ -19,6 +19,7 @@ class UpdateItemRequest extends FormRequest
 
             'priceInThb' => ['sometimes', 'required', 'integer', 'min:0'],
             'weightInGrams' => ['sometimes', 'required', 'integer', 'min:0'],
+            'cargoPriceInThb' => ['nullable', 'integer', 'min:0'],
             'cargoPriceInMmk' => ['nullable', 'integer', 'min:0'],
             'sellingPriceInMmk' => ['nullable', 'integer', 'min:0'],
 
@@ -47,6 +48,9 @@ class UpdateItemRequest extends FormRequest
             'weightInGrams.required' => 'Weight is required.',
             'weightInGrams.integer' => 'Weight must be a valid integer.',
             'weightInGrams.min' => 'Weight cannot be negative.',
+
+            'cargoPriceInThb.integer' => 'Cargo price (THB) must be a valid integer.',
+            'cargoPriceInThb.min' => 'Cargo price (THB) cannot be negative.',
 
             'cargoPriceInMmk.integer' => 'Cargo price must be a valid integer.',
             'cargoPriceInMmk.min' => 'Cargo price cannot be negative.',

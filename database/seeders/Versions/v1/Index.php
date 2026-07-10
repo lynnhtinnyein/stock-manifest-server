@@ -17,6 +17,8 @@ class Index extends VersionedSeeder
             PermissionSeeder::class,
             UserSeeder::class,
             SettingSeeder::class,
+            CategorySeeder::class,
+            ItemSeeder::class,
         ]);
     }
 }

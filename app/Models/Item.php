@@ -17,6 +17,7 @@ class Item extends Model
         'category_id',
         'price_in_thb',
         'weight_in_grams',
+        'cargo_price_in_thb',
         'cargo_price_in_mmk',
         'selling_price_in_mmk',
         'stock_in',

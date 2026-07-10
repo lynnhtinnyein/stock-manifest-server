@@ -11,7 +11,7 @@ class SettingSeeder extends Seeder
     {
         Setting::create(
             [
-                'exchange_rate' => 135,
+                'exchange_rate' => 135.12,
             ]
         );
     }

@@ -48,7 +48,7 @@ class IndexItemRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'sortBy.in' => 'The sortBy field must be one of: id, price, category, weight, sellingPrice, cargoPrice, stockStatus, or createdAt.',
+            'sortBy.in' => 'The sortBy field must be one of: id, price, category, weight, sellingPrice, cargoPriceThb, cargoPrice, stockStatus, or createdAt.',
             'sortOrder.in' => 'The sortOrder field must be either ASC or DESC.',
         ];
     }
