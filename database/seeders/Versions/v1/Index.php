@@ -15,7 +15,8 @@ class Index extends VersionedSeeder
     {
         $this->call([
             PermissionSeeder::class,
-            UserSeeder::class
+            UserSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }

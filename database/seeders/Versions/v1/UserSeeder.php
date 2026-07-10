@@ -40,7 +40,5 @@ class UserSeeder extends Seeder
             ]
         );
         $admin->permissions()->sync($adminPermissionIds);
-
-        $admins = [$admin->id];
     }
 }

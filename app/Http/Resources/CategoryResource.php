@@ -12,12 +12,7 @@ class CategoryResource extends BaseResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'typeId' => $this->type_id,
-            'suffix' => $this->suffix,
-            'hasSize' => $this->has_size,
-            'hasAttachment' => $this->has_attachment,
-            'isGemIncludable' => $this->is_gem_includable,
-            'traderWeightCalculation' => $this->trader_weight_calculation,
+            'color' => $this->color,
         ];
     }
 }

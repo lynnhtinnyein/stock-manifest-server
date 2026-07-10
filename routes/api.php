@@ -88,15 +88,9 @@ Route::prefix('v1')->group(function () {
         });
 
         // Settings
-        Route::prefix('settings')->middleware('permission:settings.default')->controller(SettingController::class)->group(function () {
-            Route::get('/', [SettingController::class, 'index']);
-            Route::get('/{setting}', [SettingController::class, 'show']);
-
-            Route::middleware('permission:settings.manage')->group(function () {
-                Route::post('/', [SettingController::class, 'store']);
-                Route::put('/{setting}', [SettingController::class, 'update']);
-                Route::delete('/{setting}', [SettingController::class, 'destroy']);
-            });
+        Route::prefix('settings')->middleware('permission:items.default')->controller(SettingController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::put('/', 'update');
         });
     });
 });

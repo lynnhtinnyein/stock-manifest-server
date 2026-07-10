@@ -11,7 +11,6 @@ class SettingResource extends BaseResource
         return [
             'id' => $this->id,
             'exchangeRate' => $this->exchange_rate,
-            'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
         ];
     }

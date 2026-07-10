@@ -4,32 +4,22 @@ namespace App\Services;
 
 use App\Models\Setting;
 use DB;
-use Illuminate\Support\Collection;
 
 class SettingService
 {
-    public function getAll(): Collection
+    public function get(): Setting
     {
-        return Setting::orderBy('id', 'ASC')->get();
+        return Setting::firstOrCreate(
+            ['id' => 1],
+            ['exchange_rate' => 0]
+        );
     }
 
-    public function getById(int $id): ?Setting
-    {
-        return Setting::find($id);
-    }
-
-    public function create(array $data): Setting
+    public function update(array $data): Setting
     {
         return DB::transaction(function () use ($data) {
-            return Setting::create([
-                'exchange_rate' => $data['exchangeRate'],
-            ]);
-        });
-    }
+            $setting = $this->get();
 
-    public function update(Setting $setting, array $data): Setting
-    {
-        return DB::transaction(function () use ($setting, $data) {
             $mapped = ['exchangeRate' => 'exchange_rate'];
 
             $update = [];
@@ -41,14 +31,7 @@ class SettingService
 
             $setting->update($update);
 
-            return $setting;
-        });
-    }
-
-    public function delete(Setting $setting): void
-    {
-        DB::transaction(function () use ($setting) {
-            $setting->delete();
+            return $setting->fresh();
         });
     }
 }
