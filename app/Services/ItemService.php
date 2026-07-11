@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Http\Requests\Item\IndexItemRequest;
 use App\Models\Item;
-use App\Services\Attachment\AttachmentService;
 use App\Services\Attachment\OneToOneAttachmentSyncService;
 use Auth;
 use DB;
@@ -138,7 +137,7 @@ class ItemService
             $update = [];
             foreach ($mapped as $key => $column) {
                 if (array_key_exists($key, $data)) {
-                    $update[$column] = $data[$key];
+                    $update[$column] = $key === 'remark' ? $data[$key] : ($data[$key] ?? 0);
                 }
             }
             $update['updated_by'] = Auth::id();
