@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ItemController;
@@ -75,22 +76,32 @@ Route::prefix('v1')->group(function () {
         });
 
         // Categories
-        Route::prefix('categories')->middleware('permission:items.default')->controller(CategoryController::class)->group(function () {
-            Route::apiResource('/', CategoryController::class);
-            Route::post('/{id}/restore', [CategoryController::class, 'restore']);
+        Route::middleware('permission:items.default')->controller(CategoryController::class)->group(function () {
+            Route::apiResource('categories', CategoryController::class);
+            Route::post('categories/{id}/restore', [CategoryController::class, 'restore']);
         });
 
         // Items
-        Route::prefix('items')->middleware('permission:items.default')->controller(ItemController::class)->group(function () {
-            Route::apiResource('/', ItemController::class);
-            Route::post('/{item}/image', [ItemController::class, 'syncImage']);
-            Route::post('/{id}/restore', [ItemController::class, 'restore']);
+        Route::middleware('permission:items.default')->controller(ItemController::class)->group(function () {
+            Route::apiResource('items', ItemController::class);
+            Route::post('items/{item}/image', 'syncImage');
+            Route::post('items/{item}/restore', 'restore');
+
+            // attachment routes
+            Route::controller(AttachmentController::class)->group(function () {
+                Route::middleware('permission:items.default')->group(function () {
+                    Route::get('/attachments/{id}', 'show')
+                        ->name('items.attachments.show');
+                    Route::get('/attachments/{id}/download', 'download')
+                        ->name('items.attachments.download');
+                });
+            });
         });
 
         // Settings
         Route::prefix('settings')->middleware('permission:items.default')->controller(SettingController::class)->group(function () {
             Route::get('/', 'index');
-            Route::put('/', 'update');
+            Route::patch('/', 'update');
         });
     });
 });

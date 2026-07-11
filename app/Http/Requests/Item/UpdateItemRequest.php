@@ -17,11 +17,11 @@ class UpdateItemRequest extends FormRequest
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'categoryId' => ['sometimes', 'required', 'integer', 'exists:categories,id'],
 
-            'priceInThb' => ['sometimes', 'required', 'integer', 'min:0'],
+            'priceInThb' => ['sometimes', 'required', 'numeric', 'min:0'],
             'weightInGrams' => ['sometimes', 'required', 'integer', 'min:0'],
-            'cargoPriceInThb' => ['nullable', 'integer', 'min:0'],
-            'cargoPriceInMmk' => ['nullable', 'integer', 'min:0'],
-            'sellingPriceInMmk' => ['nullable', 'integer', 'min:0'],
+            'cargoPriceInThb' => ['nullable', 'numeric', 'min:0'],
+            'cargoPriceInMmk' => ['nullable', 'numeric', 'min:0'],
+            'sellingPriceInMmk' => ['nullable', 'numeric', 'min:0'],
 
             'stockIn' => ['nullable', 'integer', 'min:0'],
             'stockOut' => ['nullable', 'integer', 'min:0'],
@@ -42,20 +42,20 @@ class UpdateItemRequest extends FormRequest
             'categoryId.exists' => 'Selected category does not exist.',
 
             'priceInThb.required' => 'Price is required.',
-            'priceInThb.integer' => 'Price must be a valid integer.',
+            'priceInThb.numeric' => 'Price must be a valid number.',
             'priceInThb.min' => 'Price cannot be negative.',
 
             'weightInGrams.required' => 'Weight is required.',
             'weightInGrams.integer' => 'Weight must be a valid integer.',
             'weightInGrams.min' => 'Weight cannot be negative.',
 
-            'cargoPriceInThb.integer' => 'Cargo price (THB) must be a valid integer.',
+            'cargoPriceInThb.numeric' => 'Cargo price (THB) must be a valid number.',
             'cargoPriceInThb.min' => 'Cargo price (THB) cannot be negative.',
 
-            'cargoPriceInMmk.integer' => 'Cargo price must be a valid integer.',
+            'cargoPriceInMmk.numeric' => 'Cargo price must be a valid number.',
             'cargoPriceInMmk.min' => 'Cargo price cannot be negative.',
 
-            'sellingPriceInMmk.integer' => 'Selling price must be a valid integer.',
+            'sellingPriceInMmk.numeric' => 'Selling price must be a valid number.',
             'sellingPriceInMmk.min' => 'Selling price cannot be negative.',
 
             'stockIn.integer' => 'Stock in must be a valid integer.',

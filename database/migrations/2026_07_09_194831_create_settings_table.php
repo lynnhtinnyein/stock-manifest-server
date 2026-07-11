@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('exchange_rate')->default(0);
+            $table->decimal('exchange_rate', 12, 2)->default(0);
             $table->timestamps();
         });
     }

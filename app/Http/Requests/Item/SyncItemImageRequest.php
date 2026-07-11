@@ -14,7 +14,7 @@ class SyncItemImageRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->user()?->hasPermission('items.update') ?? false;
+        return $this->user()?->hasPermission('items.default') ?? false;
     }
 
     public function rules(): array

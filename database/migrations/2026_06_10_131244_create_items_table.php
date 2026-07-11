@@ -19,11 +19,11 @@ return new class extends Migration
             $table->string('name')->index();
 
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
-            $table->unsignedBigInteger('price_in_thb')->default(0); //in thb
-            $table->unsignedBigInteger('weight_in_grams')->default(0); //in grams
-            $table->unsignedBigInteger('cargo_price_in_thb')->default(0);
-            $table->unsignedBigInteger('cargo_price_in_mmk')->default(0);
-            $table->unsignedBigInteger('selling_price_in_mmk')->default(0);
+            $table->decimal('price_in_thb', 12, 2)->default(0);
+            $table->decimal('cargo_price_in_thb', 12, 2)->default(0);
+            $table->decimal('cargo_price_in_mmk', 12, 2)->default(0);
+            $table->decimal('selling_price_in_mmk', 12, 2)->default(0);
+            $table->decimal('weight_in_grams', 10, 2)->default(0);
 
             $table->unsignedBigInteger('stock_in')->default(0);
             $table->unsignedBigInteger('stock_out')->default(0);
@@ -31,8 +31,8 @@ return new class extends Migration
             $table->text('remark')->nullable();
 
             // create
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete(); //TODO: to handle Deleted User in response
-            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete(); //TODO: to handle Deleted User in response
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
 
             $table->softDeletes();
             $table->timestamps();

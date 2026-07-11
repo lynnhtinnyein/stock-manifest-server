@@ -14,7 +14,7 @@ class UpdateSettingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'exchangeRate' => ['sometimes', 'required', 'integer', 'min:0'],
+            'exchangeRate' => ['sometimes', 'required', 'numeric', 'min:0'],
         ];
     }
 
@@ -22,7 +22,7 @@ class UpdateSettingRequest extends FormRequest
     {
         return [
             'exchangeRate.required' => 'Exchange rate is required.',
-            'exchangeRate.integer' => 'Exchange rate must be a valid integer.',
+            'exchangeRate.numeric' => 'Exchange rate must be a valid number.',
             'exchangeRate.min' => 'Exchange rate cannot be negative.',
         ];
     }

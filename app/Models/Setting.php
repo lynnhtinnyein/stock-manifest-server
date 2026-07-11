@@ -9,8 +9,4 @@ class Setting extends Model
     protected $fillable = [
         'exchange_rate',
     ];
-
-    protected $casts = [
-        'exchange_rate' => 'integer',
-    ];
 }
