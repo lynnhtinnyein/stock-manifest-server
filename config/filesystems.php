@@ -31,14 +31,14 @@ return [
     'disks' => [
 
         'private' => [
-            'driver' => 'local',
+            'driver' => 'local_no_finfo',
             'root' => storage_path('app/private'),
             'visibility' => 'private',
             'throw' => false,
         ],
 
         'public' => [
-            'driver' => 'local',
+            'driver' => 'local_no_finfo',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
