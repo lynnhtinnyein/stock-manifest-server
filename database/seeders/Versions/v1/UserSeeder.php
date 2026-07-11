@@ -40,5 +40,17 @@ class UserSeeder extends Seeder
             ]
         );
         $admin->permissions()->sync($adminPermissionIds);
+
+        $admin2 = User::firstOrCreate(
+            [
+                'username' => 'thonethone',
+                'name' => 'Thone Thone',
+                'nickname' => 'Thone Thone',
+                'password' => Hash::make('password123'),
+                'role' => 'ADMIN',
+                'created_by' => $superAdmin->id,
+            ]
+        );
+        $admin2->permissions()->sync($adminPermissionIds);
     }
 }
