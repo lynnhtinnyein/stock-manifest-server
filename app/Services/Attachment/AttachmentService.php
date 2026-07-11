@@ -3,6 +3,7 @@
 namespace App\Services\Attachment;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -16,6 +17,8 @@ class AttachmentService
         'jpeg',
         'png',
         'gif',
+        'heic',
+        'heif',
         'pdf',
         'doc',
         'docx',
@@ -26,9 +29,15 @@ class AttachmentService
         'rar'
     ];
 
-    protected int $maxFileSize = 10240;
+    protected int $maxFileSize;
 
-    protected int $maxFiles = 5;
+    protected int $maxFiles;
+
+    public function __construct()
+    {
+        $this->maxFileSize = (int) config('attachments.max_file_size_kb', 10240);
+        $this->maxFiles = (int) config('attachments.max_files', 5);
+    }
 
     public function validateFiles(array $files): void
     {
@@ -58,20 +67,70 @@ class AttachmentService
                 ]);
             }
 
-            $extension = strtolower($file->getClientOriginalExtension());
+            $mimeType = $file->getMimeType();
+            $extension = $this->resolveExtension($file, $mimeType);
+
             if (!in_array($extension, $this->allowedMimes)) {
+                Log::warning('Attachment rejected: extension not allowed', [
+                    'original_name' => $file->getClientOriginalName(),
+                    'extension' => $extension,
+                    'mime' => $mimeType,
+                    'size' => $file->getSize(),
+                ]);
+
                 throw ValidationException::withMessages([
                     "attachments.{$index}" => ["The file must be a file of type: " . implode(', ', $this->allowedMimes) . "."]
                 ]);
             }
 
-            $mimeType = $file->getMimeType();
             if (!$this->isValidMimeType($mimeType)) {
+                Log::warning('Attachment rejected: mime type not allowed', [
+                    'original_name' => $file->getClientOriginalName(),
+                    'extension' => $extension,
+                    'mime' => $mimeType,
+                    'size' => $file->getSize(),
+                ]);
+
                 throw ValidationException::withMessages([
                     "attachments.{$index}" => ["Invalid file type."]
                 ]);
             }
         }
+    }
+
+    /**
+     * Resolve a reliable extension for the file.
+     * iOS/Safari and some upload flows omit the client extension entirely,
+     * so fall back to deriving it from the detected MIME type.
+     */
+    protected function resolveExtension(UploadedFile $file, string $mimeType): string
+    {
+        $extension = strtolower($file->getClientOriginalExtension());
+
+        if ($extension !== '') {
+            return $extension;
+        }
+
+        $mimeToExtension = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/gif' => 'gif',
+            'image/heic' => 'heic',
+            'image/heif' => 'heif',
+            'image/heic-sequence' => 'heic',
+            'image/heif-sequence' => 'heif',
+            'application/pdf' => 'pdf',
+            'application/msword' => 'doc',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+            'application/vnd.ms-excel' => 'xls',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+            'text/plain' => 'txt',
+            'application/zip' => 'zip',
+            'application/x-zip-compressed' => 'zip',
+            'application/x-rar-compressed' => 'rar',
+        ];
+
+        return $mimeToExtension[$mimeType] ?? '';
     }
 
     protected function isValidMimeType(string $mimeType): bool
@@ -81,6 +140,10 @@ class AttachmentService
             'image/jpg',
             'image/png',
             'image/gif',
+            'image/heic',
+            'image/heif',
+            'image/heic-sequence',
+            'image/heif-sequence',
             'application/pdf',
             'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -90,7 +153,7 @@ class AttachmentService
             'application/zip',
             'application/x-zip-compressed',
             'application/x-rar-compressed',
-            'application/octet-stream',
+            'application/octet-stream', // fallback — fileinfo often can't reliably ID HEIC
         ];
 
         return in_array($mimeType, $allowedMimeTypes);
@@ -99,7 +162,8 @@ class AttachmentService
     public function upload(UploadedFile $file, string $path = ''): array
     {
         $originalName = $file->getClientOriginalName();
-        $extension = $file->getClientOriginalExtension();
+        $mimeType = $file->getMimeType();
+        $extension = $this->resolveExtension($file, $mimeType);
         $storedName = Str::uuid() . '.' . $extension;
 
         $fullPath = $path ? $path . '/' . $storedName : $storedName;
@@ -110,7 +174,7 @@ class AttachmentService
             'original_name' => $originalName,
             'stored_name' => $storedName,
             'path' => $fullPath,
-            'mime_type' => $file->getMimeType(),
+            'mime_type' => $mimeType,
             'size' => $file->getSize(),
         ];
     }
