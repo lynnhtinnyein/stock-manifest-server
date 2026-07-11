@@ -9,6 +9,9 @@ class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        Category::factory()->count(20)->create();
+        Category::create([
+            'name' => 'Snacks',
+            'color' => '#f43f5e',
+        ]);
     }
 }
