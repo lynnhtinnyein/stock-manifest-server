@@ -40,7 +40,7 @@ class IndexItemRequest extends FormRequest
                 'string',
                 Rule::in(['asc', 'ASC', 'desc', 'DESC']),
             ],
-            'name' => 'sometimes|string|max:255|nullable',
+            'search' => 'sometimes|string|max:255|nullable',
             'categoryId' => 'sometimes|string|exists:categories,id|nullable',
         ];
     }

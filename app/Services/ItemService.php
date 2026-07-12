@@ -39,7 +39,7 @@ class ItemService
     {
         return [
             'filters' => [
-                'name' => $request->get('name'),
+                'search' => $request->get('search'),
                 'categoryId' => $request->get('categoryId'),
                 'onlyTrashed' => $only_trashed,
             ],
@@ -70,8 +70,10 @@ class ItemService
 
     private function applyFilters(mixed $query, array $filters): void
     {
-        if (!empty($filters['name'])) {
-            $query->where('name', 'like', '%' . $filters['name'] . '%');
+        // name or price_in_thb
+        if (!empty($filters['search'])) {
+            $query->where('name', 'like', '%' . $filters['search'] . '%')
+                ->orWhere('price_in_thb', 'like', '%' . $filters['search'] . '%');
         }
 
         if (!empty($filters['categoryId'])) {
